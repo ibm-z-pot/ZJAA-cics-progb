@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'cics-java-demo'
+
+include 'demo-pojos'
+include 'demo-bundle'
