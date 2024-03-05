@@ -8,4 +8,4 @@ pluginManagement {
 rootProject.name = 'cics-java-demo'
 
 include 'demo-pojos'
-include 'demo-bundle'
+include 'cics-java-demo-cicsbundle'

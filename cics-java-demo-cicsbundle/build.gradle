@@ -2,25 +2,23 @@ plugins {
   id 'com.ibm.cics.bundle' version '1.0.5'
 }
 
-version '1.0.0'
-
 repositories {
   mavenCentral()
 }
 
 cicsBundle {
     build {
-        defaultJVMServer = 'OSGI01'
+        defaultJVMServer = project.jvmserver
     }
     deploy {
-        cicsplex = 'CICSPLX1'
-        region   = 'CICSSF61'
-        bunddef  = 'JAVADEMO'
-        csdgroup = 'DEMO'
-        url      = 'https://zt01.mop.ibm:3050'
+        cicsplex = project.cicsplex
+        region   = project.region
+        bunddef  = project.bundle
+        csdgroup = project.csdgroup
+        url      = project.cmciUrl
         username = project.cicsUser
         password = project.cicsPass
-        insecure = true
+        insecure = project.insecure
     }
 }
 
