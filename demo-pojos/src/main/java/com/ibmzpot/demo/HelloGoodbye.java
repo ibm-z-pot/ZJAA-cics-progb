@@ -1,43 +1,56 @@
 package com.ibmzpot.demo;
 
-import java.io.UnsupportedEncodingException;
-
-import com.ibm.cics.server.Program;
-import com.ibm.cics.server.CommAreaHolder;
+import com.ibm.cics.server.Task;
+import com.ibm.cics.server.Channel;
+import com.ibm.cics.server.Container;
 import com.ibm.cics.server.CicsConditionException;
-import com.ibm.cics.server.InvalidRequestException;
 
-public class HelloGoodbye
-{ 
-    private static final String CCSID = System.getProperty("com.ibm.cics.jvmserver.local.ccsid");
-    private static final String PROGC = "PROGC";
+public class HelloGoodbye {
 
-    public static void main(CommAreaHolder cah)
-    {
-        String progaMessage = new String(cah.getValue());
+    // PROGB
+    public static void main(String[] args) {
+
         String helloMessage = "Hello from Java                 ";
-        String goodbyeMessage = "Goodbye from Java               ";
+        String goodbyeMessage = "Goodbye from Java               "; 
 
-        // LINK to PROGC
+        Channel currentChannel;        // Current Channel - created by PROGA, shared with PROGB and PROGC
+        Container progbInput;          // PROGB Input Container - created by PROGA
+        Container progbOutput;         // PROGB Output Container - created by PROGB
+        Container progcInput;          // PROGC Input Container - created by PROGB
+        Container progcOutput;         // PROGC Output Container - created by PROGC
+        String progaMessage;           // Content of PROGB Input Container
+        String progcMessage;           // Content of PROGC Output Container
+
+        Program progc = new Program();
+        progc.setName("PROGC");
+        Task currentTask = Task.getTask();
+
         try {
-            Program prog = new Program();
-            prog.setName(PROGC);
-            byte[] progcCA = helloMessage.getBytes(CCSID);
-            prog.link(progcCA);
-        } catch (UnsupportedEncodingException ue) {
-            throw new RuntimeException(ue);
-        } catch (InvalidRequestException ire) {
-            System.out.println("Invalid request on link - INVREQ");
-        } catch (CicsConditionException cce) {
+            currentChannel = currentTask.getCurrentChannel();
+	    if (currentChannel != null) {
+               // GET CONTAINER
+               progbInput = currentChannel.getContainer("PROGB_INPUT");
+               if (progbInput != null) {
+                  progaMessage = progbInput.getString();
+                  System.out.println(progaMessage); 
+	       }
+               // PUT CONTAINER
+               progcInput = currentChannel.createContainer("PROGC_INPUT");
+               progcInput.putString(helloMessage); 
+               // LINK
+               progc.link(currentChannel);
+               // GET CONTAINER
+               progcOutput = currentChannel.getContainer("PROGC_OUTPUT"); 
+               if (progcOutput != null) {
+                  progcMessage = progcOutput.getString();
+                  System.out.println(progcMessage); 
+	       }
+               // PUT CONTAINER
+               progbOutput = currentChannel.createContainer("PROGB_OUTPUT");
+               progbOutput.putString(goodbyeMessage); 
+            }
+        } catch (CicsConditionException cce) {       
             throw new RuntimeException(cce);
-        }    
-        
-        // RETURN to PROGA
-        try {
-            byte[] goodbyeCA = goodbyeMessage.getBytes(CCSID);
-            cah.setValue(goodbyeCA);
-        } catch (UnsupportedEncodingException ue) {
-            throw new RuntimeException(ue);     
-        } 
+        }
     }
 }
