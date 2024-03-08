@@ -5,7 +5,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'cics-java-demo'
+rootProject.name = 'cics-progb'
 
-include 'demo-pojos'
-include 'cics-java-demo-cicsbundle'
+include 'progb'
+include 'ZJAA-cics-progb-cicsbundle'

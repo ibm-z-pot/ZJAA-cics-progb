@@ -23,5 +23,5 @@ cicsBundle {
 }
 
 dependencies {
-  cicsBundlePart project(path:':demo-pojos', configuration: 'archives')
+  cicsBundlePart project(path:':progb', configuration: 'archives')
 }
