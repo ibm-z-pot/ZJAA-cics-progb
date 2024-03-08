@@ -12,7 +12,7 @@ jar {
     bundle{
         bnd (
                 'Bundle-SymbolicName': 'com.ibmzpot.demo',
-                'CICS-MainClass': 'com.ibmzpot.demo.HelloGoodbye'
+                'Import-Package': 'javax.ejb;resolution:=optional, *'
         )
     }
 }
@@ -20,4 +20,7 @@ jar {
 dependencies {
   compileOnly enforcedPlatform('com.ibm.cics:com.ibm.cics.ts.bom:6.1-20220617120000')
   compileOnly("com.ibm.cics:com.ibm.cics.server")
+  compileOnly('com.ibm.cics:com.ibm.cics.server.invocation.annotations')
+  annotationProcessor enforcedPlatform('com.ibm.cics:com.ibm.cics.ts.bom:6.1-20220617120000')
+  annotationProcessor('com.ibm.cics:com.ibm.cics.server.invocation')
 }

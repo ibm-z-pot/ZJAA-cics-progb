@@ -5,11 +5,12 @@ import com.ibm.cics.server.Program;
 import com.ibm.cics.server.Channel;
 import com.ibm.cics.server.Container;
 import com.ibm.cics.server.CicsConditionException;
+import com.ibm.cics.server.invocation.CICSProgram;
 
 public class HelloGoodbye {
 
-    // PROGB
-    public static void main(String[] args) {
+    @CICSProgram("PROGB")
+    public void sayHelloAndGoodbye() {
 
         String helloMessage = "Hello from Java                 ";
         String goodbyeMessage = "Goodbye from Java               "; 
